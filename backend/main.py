@@ -16,7 +16,6 @@ class FlowerClassifierPredictionQuery(Resource):
 
     ht = 128
     wd = 128
-    batch_size = 5
 
     def center(self,img):
         img = np.array(img)  
