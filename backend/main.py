@@ -3,7 +3,6 @@ from flask import Flask, request,redirect,jsonify
 from flask_restful import Resource, Api
 import tensorflow as tf
 import numpy as np
-from transformers import AutoModelWithLMHead
 import cv2
 
 
@@ -11,7 +10,7 @@ app = Flask(__name__)
 api = Api(app)
 
 CATEGORIES = ['bauhinia_blakeana','frangipani','ixora','jessamine','red_frangipani','white_frangipani']
-
+model = tf.keras.models.load_model('https://drive.google.com/drive/folders/1-N8aPPJwIk89GD9po_WE2o7m7Ksj8qHK?usp=sharing')
 class FlowerClassifierPredictionQuery(Resource):
 
     ht = 128
@@ -33,7 +32,7 @@ class FlowerClassifierPredictionQuery(Resource):
         img = tf.keras.preprocessing.image.load_img(encodedImage)
         img = tf.keras.preprocessing.image.img_to_array(img)
         img = self.center(img)
-        pred = AutoModelWithLMHead.from_pretrained("chirag2706/FlowerClassifier").predict(tf.convert_to_tensor([img]))
+        pred = model.predict(tf.convert_to_tensor([img]))
         print(CATEGORIES[np.argmax(pred[0])])
         return CATEGORIES[np.argmax(pred[0])]
 
